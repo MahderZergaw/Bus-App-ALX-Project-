@@ -46,3 +46,47 @@ class AvailableBusesView(APIView):
         serializer = BusSerializer(buses, many=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class ScheduleSeatDetailsView(APIView):
+    def get(self, request, schedule_id):
+        try:
+            schedule = Schedule.objects.get(id=schedule_id)
+            schedule_seats = schedule.schedule_seats.all()
+            serializer = ScheduleSeatSerializer(schedule_seats, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Schedule.DoesNotExist:
+            return Response({"error": "Schedule not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
+class BookSeatView(APIView):
+    def post(self, request, format=None):
+        user = request.user
+        schedule_id = request.data.get('schedule_id')
+        seat_number = request.data.get('seat_number')
+
+        if not schedule_id or not seat_number:
+            return Response({"error": "Missing schedule ID or seat number"},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            schedule = Schedule.objects.get(id=schedule_id)
+            schedule_seat = ScheduleSeat.objects.get(schedule=schedule,
+                                                     seat__seat_number=seat_number)
+
+            if not schedule_seat.is_available:
+                return Response({"error": "Seat is already booked"},
+                                status=status.HTTP_400_BAD_REQUEST)
+
+            booking = Booking.objects.create(user=user, schedule=schedule,
+                                             schedule_seat=schedule_seat)
+            schedule_seat.is_available = False
+            schedule_seat.save()
+
+            serializer = BookingSerializer(booking)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        except Schedule.DoesNotExist:
+            return Response({"error": "Schedule not found"}, status=status.HTTP_404_NOT_FOUND)
+        except ScheduleSeat.DoesNotExist:
+            return Response({"error": "Seat not found or not available"},
+                            status=status.HTTP_404_NOT_FOUND)

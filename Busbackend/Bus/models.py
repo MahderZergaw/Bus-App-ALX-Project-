@@ -15,7 +15,6 @@ class Bus(models.Model):
 class Seat(models.Model):
     bus = models.ForeignKey(Bus, related_name='seats', on_delete=models.CASCADE)
     seat_number = models.CharField(max_length=5)
-    is_available = models.BooleanField(default=True)
 
 
 class Schedule(models.Model):
@@ -24,10 +23,17 @@ class Schedule(models.Model):
     arrival_time = models.DateTimeField()
 
 
+class ScheduleSeat(models.Model):
+    schedule = models.ForeignKey(Schedule, related_name='schedule_seats', on_delete=models.CASCADE)
+    seat = models.ForeignKey(Seat, related_name='schedule_seats', on_delete=models.CASCADE)
+    is_available = models.BooleanField(default=True)
+
+
 class Booking(models.Model):
     user = models.ForeignKey(User, related_name='bookings', on_delete=models.CASCADE)
     schedule = models.ForeignKey(Schedule, related_name='bookings', on_delete=models.CASCADE)
-    seat_number = models.CharField(max_length=5)
+    schedule_seat = models.ForeignKey(ScheduleSeat, related_name='bookings',
+                                      on_delete=models.CASCADE)
     is_boarded = models.BooleanField(default=False)
     is_alighted = models.BooleanField(default=False)
 
