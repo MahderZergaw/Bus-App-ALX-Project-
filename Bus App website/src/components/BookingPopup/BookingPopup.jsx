@@ -7,7 +7,11 @@ const BookingPopup = ({ show, handleClose }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Booking Details:', { start, destination, time });
+
+    // Format the datetime-local input to ISO 8601 format
+    const isoTime = new Date(time).toISOString();
+
+    console.log('Booking Details:', { start, destination, time: isoTime });
     handleClose(); // Close the popup after submission
   };
 
@@ -45,10 +49,9 @@ const BookingPopup = ({ show, handleClose }) => {
           <div className="mb-4">
             <label htmlFor="time" className="block text-gray-700">Time</label>
             <input
-              type="text"
+              type="datetime-local"
               id="time"
               className="w-full px-3 py-2 border rounded"
-              placeholder="Enter time"
               value={time}
               onChange={(e) => setTime(e.target.value)}
             />
