@@ -4,9 +4,13 @@ import Navbar from "./components/Navbar/Navbar";
 import LandingPage from "./components/LandingPage/LandingPage";
 import Login from "./components/Login/Login";
 import Signup from "./components/Signup/Signup.jsx";
+import RegisterDriver from "./components/RegisterDriver/RegisterDriver.jsx";
+import RegisterUser from "./components/RegisterUser/RegisterUser.jsx";
+import UserDashboard from "./components/UserDashboard/UserDashboard.jsx";
+import DriverDashboard from "./components/DriverDashboard/DriverDashboard.jsx";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import Popup from "./components/Popup/Popup.jsx";
+import Popup from "./components/Popup/Popup.jsx"; 
 
 const App = () => {
   const [orderPopup, setOrderPopup] = React.useState(false);
@@ -36,6 +40,10 @@ const App = () => {
         />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/RegisterDriver" element={<RegisterDriver />} />
+        <Route path="/RegisterUser" element={<RegisterUser />} />
+        <Route path="/driver/form" element={<DriverDashboard />} />
+        <Route path="/user/form" element={<UserDashboard />} />
       </Routes>
     </Router>
   );
