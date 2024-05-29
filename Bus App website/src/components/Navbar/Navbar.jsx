@@ -63,6 +63,16 @@ const SignUpLinks = [
     name: "Log in",
     link: "/login",
   },
+  {
+    id: 3,
+    name: "Create Driver Account",
+    link: "/RegisterDriver",
+  },
+  {
+    id: 4,
+    name: "Create Passanger Account",
+    link: "/RegisterUser",
+  },
 ];
 
 const Navbar = ({ handleOrderPopup }) => {
