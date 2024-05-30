@@ -4,7 +4,7 @@ from rest_framework import status
 from django.utils.dateparse import parse_datetime
 from datetime import timedelta
 from .models import Bus, Schedule, ScheduleSeat
-from .serializers import BusSerializer, ScheduleSeatSerializer, BookingSerializer
+from .serializers import AvailableBusesSerializer, ScheduleSeatSerializer, BookingSerializer
 
 class AvailableBusesView(APIView):
     def post(self, request, format=None):
@@ -43,7 +43,7 @@ class AvailableBusesView(APIView):
         ).select_related('bus')
 
         buses = Bus.objects.filter(schedules__in=schedules).distinct()
-        serializer = BusSerializer(buses, many=True, context={'preferred_time': preferred_time})
+        serializer = AvailableBusesSerializer(buses, many=True, context={'preferred_time': preferred_time})
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
