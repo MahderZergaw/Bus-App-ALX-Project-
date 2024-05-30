@@ -1,12 +1,13 @@
+from datetime import timedelta
+from django.db.models import Count, Q
 from rest_framework import serializers
 from .models import Bus, Seat, Schedule, ScheduleSeat, Booking, Terminal, WaitingList
-from datetime import timedelta
 
 
 class SeatSerializer(serializers.ModelSerializer):
     class Meta:
         model = Seat
-        fields = ['id', 'seat_number']
+        fields = ['seat_number']
 
 
 class ScheduleSeatSerializer(serializers.ModelSerializer):
@@ -14,7 +15,7 @@ class ScheduleSeatSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ScheduleSeat
-        fields = ['id', 'seat', 'is_available']
+        fields = ['seat', 'is_available']
 
 
 class ScheduleSerializer(serializers.ModelSerializer):
@@ -24,14 +25,30 @@ class ScheduleSerializer(serializers.ModelSerializer):
         model = Schedule
         fields = ['id', 'departure_time', 'arrival_time', 'schedule_seats']
 
-
 class BusSerializer(serializers.ModelSerializer):
     # schedules = ScheduleSerializer(many=True, read_only=True)
     schedules = serializers.SerializerMethodField()
 
     class Meta:
         model = Bus
-        fields = ['id', 'driver', 'platenumber', 'start_location',
+        fields = ['driver', 'platenumber', 'start_location',
+                  'destination', 'price', 'schedules']
+
+
+class AvailableBusesScheduleSerializer(serializers.ModelSerializer):
+    available_seats = serializers.IntegerField(read_only=True)
+
+    class Meta:
+        model = Schedule
+        fields = ['id', 'departure_time', 'arrival_time', 'available_seats']
+
+
+class AvailableBusesSerializer(serializers.ModelSerializer):
+    schedules = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Bus
+        fields = ['driver', 'platenumber', 'start_location',
                   'destination', 'price', 'schedules']
 
 
@@ -45,11 +62,16 @@ class BusSerializer(serializers.ModelSerializer):
             filtered_schedules = obj.schedules.filter(
                 departure_time__gte=start_time_range,
                 departure_time__lte=end_time_range
+            ).annotate(
+                available_seats=Count('schedule_seats', filter=Q(schedule_seats__is_available=True))
             )
-            return ScheduleSerializer(filtered_schedules, many=True).data
+            return AvailableBusesScheduleSerializer(filtered_schedules, many=True).data
 
-        return ScheduleSerializer(obj.schedules.all(), many=True).data
-
+        return AvailableBusesScheduleSerializer(
+            obj.schedules.annotate(
+                available_seats=Count('schedule_seats', filter=Q(schedule_seats__is_available=True))
+            ), many=True
+        ).data
 
 class BookingSerializer(serializers.ModelSerializer):
     schedule = ScheduleSerializer(read_only=True)
