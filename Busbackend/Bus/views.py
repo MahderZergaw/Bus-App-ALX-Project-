@@ -43,7 +43,7 @@ class AvailableBusesView(APIView):
         ).select_related('bus')
 
         buses = Bus.objects.filter(schedules__in=schedules).distinct()
-        serializer = BusSerializer(buses, many=True)
+        serializer = BusSerializer(buses, many=True, context={'preferred_time': preferred_time})
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
