@@ -8,6 +8,7 @@ import RegisterDriver from "./components/RegisterDriver/RegisterDriver.jsx";
 import RegisterUser from "./components/RegisterUser/RegisterUser.jsx";
 import UserDashboard from "./components/UserDashboard/UserDashboard.jsx";
 import DriverDashboard from "./components/DriverDashboard/DriverDashboard.jsx";
+import BookingPage from "./components/BookingPage/BookingPage.jsx";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import Popup from "./components/Popup/Popup.jsx"; 
@@ -44,6 +45,7 @@ const App = () => {
         <Route path="/RegisterUser" element={<RegisterUser />} />
         <Route path="/driver/form" element={<DriverDashboard />} />
         <Route path="/user/form" element={<UserDashboard />} />
+        <Route path="/booking" element={<BookingPage />} />
       </Routes>
     </Router>
   );

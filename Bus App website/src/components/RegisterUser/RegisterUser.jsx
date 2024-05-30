@@ -18,7 +18,7 @@ const RegisterUser = () => {
                 username,
                 email,
                 password,
-                is_driver: true
+                is_driver: false
             });
 
             console.log(registerResponse);

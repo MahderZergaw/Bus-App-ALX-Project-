@@ -94,14 +94,14 @@ const Login = () => {
                     <div className="mt-4 text-center">
                         <span>
                             New Here?{" "}
-                            <Link to="/signup" className="text-blue-500 hover:underline">
+                            <Link to="/RegisterDriver" className="text-blue-500 hover:underline">
                                 Create Driver Account
                             </Link>
                         </span>
                     </div>
                     <div className="mt-4 text-center">
                         {" "}
-                        <Link to="/signup" className="text-blue-500 hover:underline">
+                        <Link to="/RegisterUser" className="text-blue-500 hover:underline">
                             Create Passenger Account
                         </Link>
                     </div>

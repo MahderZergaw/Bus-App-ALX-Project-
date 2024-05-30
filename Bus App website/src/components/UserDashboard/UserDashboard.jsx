@@ -5,24 +5,21 @@ import Terminals from "../Bus Terminals/Terminals";
 import Banner from "../Banner/Banner";
 import Subscribe from "../Subscribe/Subscribe";
 import Testimonials from "../Testimonials/Testimonials";
+import BookingPopup from "../BookingPopup/BookingPopup";
 import Footer from "../Footer/Footer";
 
 
-const DriverDashboard = ({ handleOrderPopup }) => {
+const UserDashboard = ({ handleOrderPopup }) => {
   return (
     <div
       className="bg-white dark:bg-gray-900
     dark:text-white duration-200"
     >
       <Hero handleOrderPopup={handleOrderPopup} />
-      <Trips />
-      <Terminals handleOrderPopup={handleOrderPopup} />
-      <Banner />
-      <Subscribe />
-      <Testimonials />
+    <BookingPopup />
       <Footer />
     </div>
   );
 };
 
-export default DriverDashboard;
+export default UserDashboard;

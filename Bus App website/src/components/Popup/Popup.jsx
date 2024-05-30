@@ -16,7 +16,7 @@ bg-black/50 z-50 backdrop-blur-sm flex justify-center items-center"
             {/* header */}
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-lg font-bold">Book A Seat</h1>
+                <h1 className="text-lg font-bold text-gray-300">Book A Seat</h1>
               </div>
               <div>
                 <IoCloseOutline
@@ -27,38 +27,51 @@ bg-black/50 z-50 backdrop-blur-sm flex justify-center items-center"
             </div>
             {/* form section */}
             <div className="mt-4">
+            <label htmlFor="start" className="block text-gray-300">Start</label>
               <input
                 type="text"
-                placeholder="Full Name"
+                placeholder="Enter Start location "
                 className="w-full rounded-full border border-gray-300 dark:border-gray-500
                 dark:bg-gray-800 px-2 py-1 mb-4"
               />
+              <label htmlFor="Destination" className="block text-gray-300">Destniation</label>
               <input
-                type="email"
-                placeholder="Email Address"
+                type="text"
+                placeholder="Enter Destination"
                 className="w-full rounded-full border border-gray-300 dark:border-gray-500
                 dark:bg-gray-800 px-2 py-1 mb-4"
               />
+              <label htmlFor="Time" className="block text-gray-300">Time</label>
               <input
                 type="text"
                 placeholder="Phone Number"
                 className="w-full rounded-full border border-gray-300 dark:border-gray-500
                 dark:bg-gray-800 px-2 py-1 mb-4"
               />
-              <input
-                type="text"
-                placeholder="Location"
-                className="w-full rounded-full border border-gray-300 dark:border-gray-500
-                dark:bg-gray-800 px-2 py-1 mb-4"
-              />
-              <div className="flex justify-center">
+              <div className="flex justify-end gap-4">
+              <button
+                  className="bg-gradient-to-r from-primary to-secondary
+                  hover:scale-105 duration-200 text-white py-1 px-4 rounded-full"
+                >
+                  Search for Bus
+                </button>
+                <button
+                  className="bg-gradient-to-r from-primary to-secondary
+                  hover:scale-105 duration-200 text-white py-1 px-4 rounded-full"
+                >
+                  Cancel
+                </button>
+          </div>
+              {/* <div className="flex justify-center">
                 <button
                   className="bg-gradient-to-r from-primary to-secondary
                   hover:scale-105 duration-200 text-white py-1 px-4 rounded-full"
                 >
                   Book Now
                 </button>
-              </div>
+                
+                
+              </div> */}
             </div>
           </div>
         </div>
