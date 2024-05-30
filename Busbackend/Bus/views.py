@@ -3,8 +3,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.utils.dateparse import parse_datetime
 from datetime import timedelta
-from .models import Bus, Schedule
-from .serializers import BusSerializer
+from .models import Bus, Schedule, ScheduleSeat
+from .serializers import BusSerializer, ScheduleSeatSerializer, BookingSerializer
 
 class AvailableBusesView(APIView):
     def post(self, request, format=None):
