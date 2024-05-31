@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from pytz import timezone as pytz_timezone
 
 User = get_user_model()
 
@@ -29,7 +30,11 @@ class Schedule(models.Model):
     arrival_time = models.DateTimeField()
 
     def __str__(self):
-        return f"({self.bus.platenumber}) {self.bus.start_location} - {self.bus.destination} ({self.departure_time} - {self.arrival_time})"
+        east_africa_tz = pytz_timezone('Africa/Nairobi')
+        departure_time = self.departure_time.astimezone(east_africa_tz)
+        arrival_time = self.arrival_time.astimezone(east_africa_tz)
+
+        return f"({self.bus.platenumber}) {self.bus.start_location} - {self.bus.destination} ({departure_time} - {arrival_time})"
 
 
 class ScheduleSeat(models.Model):

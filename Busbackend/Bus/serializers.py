@@ -35,6 +35,7 @@ class BusSerializer(serializers.ModelSerializer):
                   'destination', 'price', 'schedules']
 
 
+# Serializers for AvailableBusesView
 class AvailableBusesScheduleSerializer(serializers.ModelSerializer):
     available_seats = serializers.IntegerField(read_only=True)
 
@@ -72,6 +73,7 @@ class AvailableBusesSerializer(serializers.ModelSerializer):
                 available_seats=Count('schedule_seats', filter=Q(schedule_seats__is_available=True))
             ), many=True
         ).data
+
 
 class BookingSerializer(serializers.ModelSerializer):
     schedule = ScheduleSerializer(read_only=True)

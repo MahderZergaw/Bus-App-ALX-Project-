@@ -4,7 +4,7 @@ from rest_framework import status
 from django.utils.dateparse import parse_datetime
 from datetime import timedelta
 from .models import Bus, Schedule, ScheduleSeat
-from .serializers import AvailableBusesSerializer, ScheduleSeatSerializer, BookingSerializer
+from .serializers import AvailableBusesSerializer, ScheduleSerializer, BookingSerializer
 
 class AvailableBusesView(APIView):
     def post(self, request, format=None):
@@ -52,8 +52,8 @@ class ScheduleSeatDetailsView(APIView):
     def get(self, request, schedule_id):
         try:
             schedule = Schedule.objects.get(id=schedule_id)
-            schedule_seats = schedule.schedule_seats.all()
-            serializer = ScheduleSeatSerializer(schedule_seats, many=True)
+            # schedule_seats = schedule.schedule_seats.all()
+            serializer = ScheduleSerializer(schedule)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Schedule.DoesNotExist:
             return Response({"error": "Schedule not found"}, status=status.HTTP_404_NOT_FOUND)
