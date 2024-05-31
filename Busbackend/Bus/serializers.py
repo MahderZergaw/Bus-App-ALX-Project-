@@ -75,8 +75,23 @@ class AvailableBusesSerializer(serializers.ModelSerializer):
         ).data
 
 
+class BookingScheduleSeatSerializer(serializers.ModelSerializer):
+    seat = SeatSerializer()
+
+    class Meta:
+        model = ScheduleSeat
+        fields = ['seat']
+
+
+class BookingScheduleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Schedule
+        fields = ['id', 'departure_time', 'arrival_time']
+
+
 class BookingSerializer(serializers.ModelSerializer):
-    schedule = ScheduleSerializer(read_only=True)
+    schedule = BookingScheduleSerializer(read_only=True)
+    schedule_seat = BookingScheduleSeatSerializer()
 
     class Meta:
         model = Booking
