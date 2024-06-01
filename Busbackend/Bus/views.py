@@ -1,10 +1,18 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from django.utils.dateparse import parse_datetime
 from datetime import timedelta
+from django.shortcuts import get_object_or_404
+from django.utils.dateparse import parse_datetime
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from .models import Bus, Booking, Schedule, ScheduleSeat
-from .serializers import AvailableBusesSerializer, ScheduleSerializer, BookingSerializer
+from .serializers import (
+    AvailableBusesSerializer,
+    ScheduleSerializer,
+    BookingSerializer,
+    ViewPassengersBookingsSerializer
+)
+
 
 class AvailableBusesView(APIView):
     def post(self, request, format=None):
@@ -60,6 +68,8 @@ class ScheduleSeatDetailsView(APIView):
 
 
 class BookSeatView(APIView):
+    permission_classes = [IsAuthenticated]
+
     def post(self, request, format=None):
         user = request.user
         schedule_id = request.data.get('schedule_id')
@@ -90,3 +100,21 @@ class BookSeatView(APIView):
         except ScheduleSeat.DoesNotExist:
             return Response({"error": "Seat not found or not available"},
                             status=status.HTTP_404_NOT_FOUND)
+
+
+class ViewPassengersView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, schedule_id, format=None):
+        user = request.user
+        
+        schedule = get_object_or_404(Schedule.objects.select_related('bus'), id=schedule_id)
+
+        if schedule.bus.driver != user:
+            return Response({"error": "You are not authorized to view this schedule."},
+                            status=status.HTTP_403_FORBIDDEN)
+
+        bookings = Booking.objects.filter(schedule=schedule)
+        serializer = BookingSerializer(bookings, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
