@@ -1,6 +1,8 @@
-from datetime import timedelta
+from datetime import datetime, timedelta
+from django.db.models import Count
 from django.shortcuts import get_object_or_404
-from django.utils.dateparse import parse_datetime
+from django.utils.dateparse import parse_date, parse_datetime
+from django.utils.timezone import make_aware
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -10,7 +12,8 @@ from .serializers import (
     AvailableBusesSerializer,
     ScheduleSerializer,
     BookingSerializer,
-    ViewPassengersBookingsSerializer
+    ViewPassengersBookingsSerializer,
+    DriverSchedulesSerializer
 )
 
 
@@ -115,6 +118,40 @@ class ViewPassengersView(APIView):
                             status=status.HTTP_403_FORBIDDEN)
 
         bookings = Booking.objects.filter(schedule=schedule)
-        serializer = BookingSerializer(bookings, many=True)
+        serializer = ViewPassengersBookingsSerializer(bookings, many=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+
+class DriverSchedulesView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, date, format=None):
+        user = request.user
+
+        if user.is_driver:
+            try:
+                bus = Bus.objects.get(driver=user)
+            except Bus.DoesNotExist:
+                return Response({"error": "Bus not found."}, status=status.HTTP_404_NOT_FOUND)
+            
+            try:
+                date = parse_date(date)
+                if date is None:
+                    raise ValueError("Invalid date format.")
+            except ValueError:
+                return Response({"error": "Invalid date format."}, status=status.HTTP_400_BAD_REQUEST)
+            
+            start_of_day = make_aware(datetime.combine(date, datetime.min.time()))
+            end_of_day = start_of_day + timedelta(days=1)
+
+            schedules = Schedule.objects.filter(
+                bus=bus,
+                departure_time__gte=start_of_day,
+                departure_time__lt=end_of_day
+            ).annotate(num_booked_seats=Count('bookings'))
+            serializer = DriverSchedulesSerializer(schedules, many=True)
+
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response({"error": "You are not authorized to view this page."},
+                         status=status.HTTP_403_FORBIDDEN)
