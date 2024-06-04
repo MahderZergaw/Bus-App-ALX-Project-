@@ -123,7 +123,7 @@ class DriverSchedulesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Schedule
-        fields = ['departure_time', 'arrival_time', 'num_booked_seats']
+        fields = ['id', 'departure_time', 'arrival_time', 'num_booked_seats']
 
 
 class TerminalSerializer(serializers.ModelSerializer):
