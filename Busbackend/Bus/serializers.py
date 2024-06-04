@@ -105,7 +105,25 @@ class BookingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Booking
-        fields = ['id', 'user', 'schedule', 'schedule_seat', 'is_boarded', 'is_alighted'] 
+        fields = ['id', 'user', 'schedule', 'schedule_seat', 'is_boarded', 'is_alighted']
+
+
+# Serializers for ViewPassengersBookingsView
+class ViewPassengersBookingsSerializer(serializers.ModelSerializer):
+    schedule_seat = BookingScheduleSeatSerializer()
+
+    class Meta:
+        model = Booking
+        fields = ['id', 'user', 'schedule_seat', 'is_boarded', 'is_alighted']
+
+
+# Serializers for DriverSchedulesView
+class DriverSchedulesSerializer(serializers.ModelSerializer):
+    num_booked_seats = serializers.IntegerField(read_only=True)
+
+    class Meta:
+        model = Schedule
+        fields = ['departure_time', 'arrival_time', 'num_booked_seats']
 
 
 class TerminalSerializer(serializers.ModelSerializer):
