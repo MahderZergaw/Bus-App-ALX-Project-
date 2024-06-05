@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 from pytz import timezone as pytz_timezone
+import uuid
 
 User = get_user_model()
 
@@ -47,12 +48,14 @@ class ScheduleSeat(models.Model):
 
 
 class Booking(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, related_name='bookings', on_delete=models.CASCADE)
     schedule = models.ForeignKey(Schedule, related_name='bookings', on_delete=models.CASCADE)
     schedule_seat = models.ForeignKey(ScheduleSeat, related_name='bookings',
                                       on_delete=models.CASCADE)
     is_boarded = models.BooleanField(default=False)
     is_alighted = models.BooleanField(default=False)
+    qr_code = models.TextField(null=True, blank=True)
 
 
 class Terminal(models.Model):

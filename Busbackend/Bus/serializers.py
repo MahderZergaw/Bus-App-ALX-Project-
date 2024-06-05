@@ -26,7 +26,6 @@ class ScheduleSerializer(serializers.ModelSerializer):
         fields = ['id', 'departure_time', 'arrival_time', 'schedule_seats']
 
 class BusSerializer(serializers.ModelSerializer):
-    # schedules = ScheduleSerializer(many=True, read_only=True)
     schedules = serializers.SerializerMethodField()
 
     class Meta:
@@ -105,7 +104,7 @@ class BookingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Booking
-        fields = ['id', 'user', 'schedule', 'schedule_seat', 'is_boarded', 'is_alighted']
+        fields = ['id', 'user', 'schedule', 'schedule_seat', 'is_boarded', 'is_alighted', 'qr_code']
 
 
 # Serializers for ViewPassengersBookingsView
