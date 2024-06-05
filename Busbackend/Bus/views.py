@@ -164,8 +164,8 @@ class UpdateBookingStatusView(APIView):
         booking = get_object_or_404(Booking, pk=booking_id)
 
         if booking.is_boarded:
-            return Response({"error": "This booking is already marked as boarded"},
-                           status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "This booking is already marked as boarded."},
+                            status=status.HTTP_400_BAD_REQUEST)
 
         booking.is_boarded = True
         booking.save()
