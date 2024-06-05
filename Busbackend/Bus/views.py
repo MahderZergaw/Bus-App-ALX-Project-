@@ -155,3 +155,19 @@ class DriverSchedulesView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response({"error": "You are not authorized to view this page."},
                          status=status.HTTP_403_FORBIDDEN)
+    
+
+class UpdateBookingStatusView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request, booking_id, format=None):
+        booking = get_object_or_404(Booking, pk=booking_id)
+
+        if booking.is_boarded:
+            return Response({"error": "This booking is already marked as boarded"},
+                           status=status.HTTP_400_BAD_REQUEST)
+
+        booking.is_boarded = True
+        booking.save()
+
+        return Response({"message": "Booking status updated successfully."}, status=status.HTTP_200_OK)

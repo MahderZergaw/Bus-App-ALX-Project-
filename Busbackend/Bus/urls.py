@@ -4,7 +4,8 @@ from .views import (
     ScheduleSeatDetailsView,
     BookSeatView,
     ViewPassengersView,
-    DriverSchedulesView
+    DriverSchedulesView,
+    UpdateBookingStatusView
 )
 
 urlpatterns = [
@@ -14,4 +15,5 @@ urlpatterns = [
     path('book-seat/', BookSeatView.as_view(), name='book-seat'),
     path('view-passengers/<int:schedule_id>/', ViewPassengersView.as_view(), name='view-passengers'),
     path('driver-schedules/<str:date>/', DriverSchedulesView.as_view(), name='driver-schedules'),
+    path('update-booking-status/<str:booking_id>/', UpdateBookingStatusView.as_view(), name='is-boarded'),
 ]
