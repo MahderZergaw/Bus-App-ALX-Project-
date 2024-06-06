@@ -1,3 +1,6 @@
+import qrcode
+from io import BytesIO
+import base64
 from datetime import datetime, timedelta
 from django.db.models import Count
 from django.shortcuts import get_object_or_404
@@ -7,7 +10,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import Bus, Booking, Schedule, ScheduleSeat
+from .models import Bus, Schedule, ScheduleSeat, Booking
 from .serializers import (
     AvailableBusesSerializer,
     ScheduleSerializer,
@@ -54,7 +57,8 @@ class AvailableBusesView(APIView):
         ).select_related('bus')
 
         buses = Bus.objects.filter(schedules__in=schedules).distinct()
-        serializer = AvailableBusesSerializer(buses, many=True, context={'preferred_time': preferred_time})
+        serializer = AvailableBusesSerializer(buses, many=True,
+                                              context={'preferred_time': preferred_time})
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -96,6 +100,20 @@ class BookSeatView(APIView):
             schedule_seat.is_available = False
             schedule_seat.save()
 
+            # Generate QR code
+            qr_data = f"Booking ID: {booking.id}, User ID: {user.id}, Schedule ID: {schedule.id}, Seat Number: {seat_number}"
+            qr = qrcode.QRCode(version=1, box_size=10, border=5)
+            qr.add_data(qr_data)
+            qr.make(fit=True)
+            img = qr.make_image(fill='black', back_color='white')
+            buffer = BytesIO()
+            img.save(buffer, format="PNG")
+            qr_code_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+
+            # Store the QR code in the booking
+            booking.qr_code = qr_code_base64
+            booking.save()
+
             serializer = BookingSerializer(booking)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         except Schedule.DoesNotExist:
@@ -104,24 +122,6 @@ class BookSeatView(APIView):
             return Response({"error": "Seat not found or not available"},
                             status=status.HTTP_404_NOT_FOUND)
 
-
-class ViewPassengersView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request, schedule_id, format=None):
-        user = request.user
-        
-        schedule = get_object_or_404(Schedule.objects.select_related('bus'), id=schedule_id)
-
-        if schedule.bus.driver != user:
-            return Response({"error": "You are not authorized to view this schedule."},
-                            status=status.HTTP_403_FORBIDDEN)
-
-        bookings = Booking.objects.filter(schedule=schedule)
-        serializer = ViewPassengersBookingsSerializer(bookings, many=True)
-
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    
 
 class DriverSchedulesView(APIView):
     permission_classes = [IsAuthenticated]
@@ -140,7 +140,8 @@ class DriverSchedulesView(APIView):
                 if date is None:
                     raise ValueError("Invalid date format.")
             except ValueError:
-                return Response({"error": "Invalid date format."}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"error": "Invalid date format."},
+                                status=status.HTTP_400_BAD_REQUEST)
             
             start_of_day = make_aware(datetime.combine(date, datetime.min.time()))
             end_of_day = start_of_day + timedelta(days=1)
@@ -155,3 +156,63 @@ class DriverSchedulesView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response({"error": "You are not authorized to view this page."},
                          status=status.HTTP_403_FORBIDDEN)
+
+
+class ViewPassengersView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, schedule_id, format=None):
+        user = request.user
+        
+        schedule = get_object_or_404(Schedule.objects.select_related('bus'), id=schedule_id)
+
+        if schedule.bus.driver != user:
+            return Response({"error": "You are not authorized to view this schedule."},
+                            status=status.HTTP_403_FORBIDDEN)
+
+        bookings = Booking.objects.filter(schedule=schedule)
+        serializer = ViewPassengersBookingsSerializer(bookings, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class DeleteBookingView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, booking_id, format=None):
+        user = request.user
+
+        if not user.is_driver:
+            return Response({"error": "You are not authorized to perform this action."},
+                            status=status.HTTP_403_FORBIDDEN)
+
+        booking = get_object_or_404(Booking, pk=booking_id)
+
+        if booking.schedule.bus.driver != user:
+            return Response({"error": "You are not authorized to delete this booking."},
+                            status=status.HTTP_403_FORBIDDEN)
+
+        booking.delete()
+        return Response({"message": "Booking deleted successfully."},
+                        status=status.HTTP_204_NO_CONTENT)
+
+
+class UpdateBookingStatusView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request, booking_id, format=None):
+        booking = get_object_or_404(Booking, pk=booking_id)
+
+        if booking.is_boarded:
+            return Response({"error": "This booking is already marked as boarded."},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        booking.is_boarded = True
+        booking.save()
+
+        return Response({"message": "Booking status updated successfully."},
+                        status=status.HTTP_200_OK)
+
+
+class ScanPassengerView(APIView):
+    permission_classes = [IsAuthenticated]
