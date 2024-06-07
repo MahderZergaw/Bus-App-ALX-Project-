@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import axios from "axios";
-import QRCode from "qrcode.react";
 
 const SeatMap = ({ seats, scheduleId }) => {
   const [selectedSeat, setSelectedSeat] = useState(null);
@@ -145,7 +144,7 @@ const SeatMap = ({ seats, scheduleId }) => {
             <p>Price: {bookingDetails.schedule.bus.price}</p>
             <p>Seat Number: {bookingDetails.schedule_seat.seat.seat_number}</p>
           </div>
-          <QRCode value={bookingDetails.id} size={200} />
+          <img src={`data:image/png;base64,${bookingDetails.qr_code}` }className="w-40; h-40" alt="QR Code" />
         </div>
       )}
     </div>
