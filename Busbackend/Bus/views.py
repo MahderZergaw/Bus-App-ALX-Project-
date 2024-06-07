@@ -101,7 +101,7 @@ class BookSeatView(APIView):
             schedule_seat.save()
 
             # Generate QR code
-            qr_data = f"Booking ID: {booking.id}, User ID: {user.id}, Schedule ID: {schedule.id}, Seat Number: {seat_number}"
+            qr_data = f"booking_id: {booking.id}, user_id: {user.id}, schedule_id: {schedule.id}, seat_number: {seat_number}"
             qr = qrcode.QRCode(version=1, box_size=10, border=5)
             qr.add_data(qr_data)
             qr.make(fit=True)
