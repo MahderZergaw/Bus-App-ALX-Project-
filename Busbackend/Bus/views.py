@@ -216,3 +216,28 @@ class UpdateBookingStatusView(APIView):
 
 class ScanPassengerView(APIView):
     permission_classes = [IsAuthenticated]
+
+    def post(self, request, format=None):
+        user = request.user
+
+        if not user.is_driver:
+           return Response({"error": "You are not authorized to perform this action."},
+                            status=status.HTTP_403_FORBIDDEN)
+
+        # Validate Booking
+        booking_id = request.data.get('booking_id')
+        try:
+            if not booking_id:
+                return Response({"error": "Invalid QR code data"}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Validate the booking
+            booking = Booking.objects.get(id=booking_id)
+
+            booking.is_boarded = True
+            booking.save()
+
+            return Response({"Booking ID": booking.id}, status=status.HTTP_200_OK)
+        except Booking.DoesNotExist:
+            return Response({"error": "Booking not found"}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
