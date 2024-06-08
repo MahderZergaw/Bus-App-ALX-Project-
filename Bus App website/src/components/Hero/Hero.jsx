@@ -3,7 +3,7 @@ import Image1 from "../../assets/Hero_Images/Image1.jpg";
 import Image2 from "../../assets/Hero_Images/Image2.jpg";
 import Image3 from "../../assets/Hero_Images/Image3.jpg";
 import Slider from "react-slick";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const ImageList = [
   {
@@ -30,10 +30,11 @@ const ImageList = [
 ];
 
 const Hero = () => {
-  const history = useNavigate();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const handleBookNowClick = () => {
-    history("/booking");
+    navigate("/booking");
   };
 
   var settings = {
@@ -74,17 +75,27 @@ const Hero = () => {
                   >
                     {data.description}
                   </p>
-                  <div data-aos="fade-up" data-aos-duration="500" data-aos-once="300">
-                    <button
-                      onClick={handleBookNowClick}
-                      className="bg-gradient-to-r from-primary to-secondary hover:scale-105 duration-200 text-white py-2 px-4 rounded-full"
+                  {location.pathname !== '/' && (
+                    <div
+                      data-aos="fade-up"
+                      data-aos-duration="500"
+                      data-aos-once="300"
                     >
-                      Book A Seat Now
-                    </button>
-                  </div>
+                      <button
+                        onClick={handleBookNowClick}
+                        className="bg-gradient-to-r from-primary to-secondary hover:scale-105 duration-200 text-white py-2 px-4 rounded-full"
+                      >
+                        Book A Seat Now
+                      </button>
+                    </div>
+                  )}
                 </div>
                 <div className="order-1 sm:order-2">
-                  <div data-aos="zoom-in" data-aos-once="true" className="relative z-10">
+                  <div
+                    data-aos="zoom-in"
+                    data-aos-once="true"
+                    className="relative z-10"
+                  >
                     <img
                       src={data.img}
                       alt=""
