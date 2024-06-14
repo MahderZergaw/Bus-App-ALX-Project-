@@ -16,9 +16,8 @@ const LandingPage = ({ handleOrderPopup }) => {
     >
       <Hero handleOrderPopup={handleOrderPopup} />
       <Trips />
-      <Terminals handleOrderPopup={handleOrderPopup} />
+      
       <Banner />
-      <Subscribe />
       <Testimonials />
       <Footer />
     </div>

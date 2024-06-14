@@ -55,29 +55,29 @@ const RegisterDriver = () => {
             style={{ backgroundImage: "url('/src/assets/Subs-Image.jpg')" }}
         >
             <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-                <h1 className="text-2xl font-bold mb-4">Create Account for Driver</h1>
+                <h1 className="text-2xl font-bold mb-4 text-gray-800">Create Account for Driver</h1>
                 <form onSubmit={handleRegister}>
                     <div className="mb-4">
-                        <label htmlFor="name" className="block text-gray-700">
+                        <label htmlFor="fullname" className="block text-gray-700">
                             Full Name
                         </label>
                         <input
                             type="text"
-                            id="name"
-                            className="w-full px-3 py-2 border rounded"
+                            id="fullname"
+                            className="w-full px-3 py-2 border rounded text-gray-900"
                             placeholder="Enter Full Name"
                             value={fullname}
                             onChange={e => setFullname(e.target.value)}
                         />
                     </div>
                     <div className="mb-4">
-                        <label htmlFor="name" className="block text-gray-700">
+                        <label htmlFor="username" className="block text-gray-700">
                             Username
                         </label>
                         <input
                             type="text"
-                            id="Username"
-                            className="w-full px-3 py-2 border rounded"
+                            id="username"
+                            className="w-full px-3 py-2 border rounded text-gray-900"
                             placeholder="Enter Username"
                             value={username}
                             onChange={e => setUsername(e.target.value)}
@@ -85,12 +85,12 @@ const RegisterDriver = () => {
                     </div>
                     <div className="mb-4">
                         <label htmlFor="plateNumber" className="block text-gray-700">
-                        Plate Number
+                            Plate Number
                         </label>
                         <input
                             type="text"
                             id="plateNumber"
-                            className="w-full px-3 py-2 border rounded"
+                            className="w-full px-3 py-2 border rounded text-gray-900"
                             placeholder="Enter Plate Number"
                             value={plateNumber}
                             onChange={e => setPlateNumber(e.target.value)}
@@ -103,7 +103,7 @@ const RegisterDriver = () => {
                         <input
                             type="email"
                             id="email"
-                            className="w-full px-3 py-2 border rounded"
+                            className="w-full px-3 py-2 border rounded text-gray-900"
                             placeholder="Enter Email"
                             value={email}
                             onChange={e => setEmail(e.target.value)}
@@ -111,12 +111,12 @@ const RegisterDriver = () => {
                     </div>
                     <div className="mb-4">
                         <label htmlFor="password" className="block text-gray-700">
-                             Password
+                            Password
                         </label>
                         <input
                             type="password"
                             id="password"
-                            className="w-full px-3 py-2 border rounded"
+                            className="w-full px-3 py-2 border rounded text-gray-900"
                             placeholder="Enter Password"
                             value={password}
                             onChange={e => setPassword(e.target.value)}
@@ -128,7 +128,7 @@ const RegisterDriver = () => {
                     >
                         Sign Up
                     </button>
-                    <div className="mt-4 text-center">
+                    <div className="mt-4 text-center text-gray-700">
                         <span>
                             Already have an account?{" "}
                             <Link to="/login" className="text-blue-500 hover:underline">

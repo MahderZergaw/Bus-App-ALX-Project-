@@ -96,6 +96,7 @@ const DriverDashboard = () => {
         // Remove the passenger from the state
         const updatedPassengers = passengers.filter((passenger) => passenger.id !== passengerId);
         setPassengers(updatedPassengers);
+        alert("You have removed Passanger successfully");
 
         // Update the booked seats count in the corresponding schedule
         const updatedSchedules = schedules.map((schedule) => {

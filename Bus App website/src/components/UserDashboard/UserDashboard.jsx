@@ -17,6 +17,8 @@ const UserDashboard = ({ handleOrderPopup }) => {
     >
       <Hero handleOrderPopup={handleOrderPopup} />
     <BookingPopup />
+    <Terminals handleOrderPopup={handleOrderPopup} />
+    {/* <Subscribe /> */}
       <Footer />
     </div>
   );
