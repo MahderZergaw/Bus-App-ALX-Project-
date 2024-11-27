@@ -1,5 +1,5 @@
 import React from "react";
-import footerLogo from "../../assets/logo.jpg";
+import footerLogo from "../../assets/Logo.png";
 import Banner from "../../assets/FooterImage.jpg";
 import {
   FaInstagram,

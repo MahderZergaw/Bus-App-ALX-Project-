@@ -1,41 +1,37 @@
-import React from "react";
-import Lightbutton from "../../assets/LightMode.png";
-import Darkbutton from "../../assets/DarkMode.png";
+import React, { useEffect, useState } from "react";
+import { FaSun, FaMoon } from "react-icons/fa";
+import { IoSunnyOutline } from "react-icons/io5";
 
 const DarkMode = () => {
-  const [theme, setTheme] = React.useState(
-    localStorage.getItem("theme") ? localStorage.getItem("theme") : "light"
-  );
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
 
-  const element = document.documentElement;
-
-  React.useEffect(() => {
+  useEffect(() => {
+    const root = document.documentElement;
     if (theme === "dark") {
-      element.classList.add("dark");
-      localStorage.setItem("theme", "dark");
+      root.classList.add("dark");
     } else {
-      element.classList.remove("dark");
-      localStorage.setItem("theme", "light");
+      root.classList.remove("dark");
     }
+    localStorage.setItem("theme", theme);
   }, [theme]);
 
+  const toggleTheme = () => setTheme(theme === "light" ? "dark" : "light");
+
   return (
-    <div className="relative">
-      <img
-        src={Lightbutton}
-        alt=""
-        onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-        className={`w-12 cursor-pointer drop-shadow-[1px_1px_1px_rgba(0,0,0,0.1)] transition-all
-        duration-300 rounded-full absolute right-0 z-10 ${ theme === "dark" ? "opacity-0" : "opacity-100"}`}
-      />
-      <img
-        src={Darkbutton}
-        alt=""
-        onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-        className="w-12 cursor-pointer drop-shadow-
-        [1px_1px_1px_rgba(0,0,0,0.1)] rounded-full transition-all
-        duration-300"
-      />
+    <div className="flex items-center cursor-pointer">
+      {theme === "light" ? (
+        <FaMoon
+          className="text-xl  dark:text-black hover:text-gray-900 transition duration-300"
+          onClick={toggleTheme}
+          aria-label="Switch to dark mode"
+        />
+      ) : (
+        <IoSunnyOutline
+          className="text-xl text-white hover:text-grey-600 transition duration-300"
+          onClick={toggleTheme}
+          aria-label="Switch to light mode"
+        />
+      )}
     </div>
   );
 };
