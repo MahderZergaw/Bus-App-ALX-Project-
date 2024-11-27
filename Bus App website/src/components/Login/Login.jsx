@@ -27,7 +27,8 @@ const Login = () => {
             // Store the tokens and role in localStorage
             localStorage.setItem('access_token', access);
             localStorage.setItem('refresh_token', refresh);
-            localStorage.setItem('is_driver', is_driver);
+            localStorage.setItem('is_driver', is_driver.toString());
+            
             
             // Redirect based on role
             if (is_driver) {

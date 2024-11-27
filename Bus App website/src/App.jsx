@@ -32,7 +32,9 @@ const App = () => {
 
   return (
     <Router>
+      {/* <Navbar handleOrderPopup={handleOrderPopup} userRole={currentUser.role}/> */}
       <Navbar handleOrderPopup={handleOrderPopup} />
+
       <Popup orderPopup={orderPopup} setOrderPopup={setOrderPopup} />
       <Routes>
         <Route
