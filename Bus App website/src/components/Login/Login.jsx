@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-// import jwt_decode from 'jwt-decode';
-// import jwt_decode from 'jwt-decode';
+// import jwtDecode from 'jwt-decode';
 import { jwtDecode } from "jwt-decode";
-// import  decode  from 'jwt-decode';
-
+import { login } from '../../redux/authSlice'; // Import Redux action
 
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const handleLogin = async (event) => {
-        event.preventDefault();  // Prevent the default form submission
+        event.preventDefault();
         try {
             const response = await axios.post('http://localhost:8000/api/Account/token/', {
                 username,
@@ -24,20 +25,18 @@ const Login = () => {
             const decodedToken = jwtDecode(access);
             const is_driver = decodedToken.is_driver;
 
-            // Store the tokens and role in localStorage
+            // Store tokens in localStorage
             localStorage.setItem('access_token', access);
             localStorage.setItem('refresh_token', refresh);
             localStorage.setItem('is_driver', is_driver.toString());
-            
-            
+
+            // Update Redux state
+            dispatch(login({ userRole: is_driver ? 'driver' : 'passenger' }));
+
             // Redirect based on role
-            if (is_driver) {
-                window.location.href = '/driver/form';
-            } else {
-                window.location.href = '/user/form';
-            }
+            navigate(is_driver ? '/driver/form' : '/user/form');
         } catch (error) {
-            console.error("There was an error logging in!", error);
+            console.error("Error logging in:", error);
         }
     };
 
@@ -59,7 +58,7 @@ const Login = () => {
                             className="w-full px-3 py-2 border rounded"
                             placeholder="Enter Username"
                             value={username}
-                            onChange={e => setUsername(e.target.value)}
+                            onChange={(e) => setUsername(e.target.value)}
                         />
                     </div>
                     <div className="mb-4">
@@ -72,7 +71,7 @@ const Login = () => {
                             className="w-full px-3 py-2 border rounded"
                             placeholder="Enter Password"
                             value={password}
-                            onChange={e => setPassword(e.target.value)}
+                            onChange={(e) => setPassword(e.target.value)}
                         />
                     </div>
                     <div className="mb-4 flex items-center justify-between">
@@ -101,7 +100,6 @@ const Login = () => {
                         </span>
                     </div>
                     <div className="mt-4 text-center">
-                        {" "}
                         <Link to="/RegisterUser" className="text-blue-500 hover:underline">
                             Create Passenger Account
                         </Link>

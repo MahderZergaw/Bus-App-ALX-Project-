@@ -1,133 +1,109 @@
-import React, { useState, useEffect } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../../redux/authSlice";
 import Logo from "../../assets/Logo.png";
-import { FaBusAlt, FaCaretDown, FaBars, FaTimes } from "react-icons/fa";
+import { FaBusAlt, FaBars, FaCaretDown } from "react-icons/fa";
 import DarkMode from "./DarkMode";
-import Dropdown from "./Dropdown";
-import MobileMenu from "./MobileMenu";
-import ROUTES from "../../constants/routes";
 
 const Navbar = ({ handleOrderPopup }) => {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const [sideMenuOpen, setSideMenuOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [userRole, setUserRole] = useState(null); // Store user role
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Check login state
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { isLoggedIn, userRole } = useSelector((state) => state.auth);
 
-  useEffect(() => {
-    // Check if the user is logged in
-    const accessToken = localStorage.getItem("access_token");
-    const isDriver = localStorage.getItem("is_driver");
+    // State to toggle dropdown visibility
+    const [showDropdown, setShowDropdown] = useState(false);
 
-    if (accessToken) {
-      setIsLoggedIn(true);
-      setUserRole(isDriver === "true" ? "driver" : "passenger");
-    } else {
-      setIsLoggedIn(false);
-      setUserRole(null); // Clear role for logged-out users
-    }
-  }, []);
+    const handleLogout = () => {
+        // Clear tokens from localStorage
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("refresh_token");
+        localStorage.removeItem("is_driver");
+        dispatch(logout()); // Update Redux state
+        navigate("/"); // Redirect to home
+    };
 
-  const toggleSideMenu = () => {
-    setSideMenuOpen(!sideMenuOpen);
-    setDropdownOpen(false);
-  };
-  const LogoutClicked=() => {
-     localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
-    localStorage.removeItem('is_driver'); 
-    navigate(ROUTES.logout)
-  };
+    const handleRegisterClick = (role) => {
+        setShowDropdown(false); // Hide dropdown
+        if (role === "driver") navigate("/RegisterDriver");
+        if (role === "passenger") navigate("/RegisterUser");
+    };
 
-  const toggleDropdown = () => {
-    setDropdownOpen(!dropdownOpen);
-  };
+    return (
+        <div className="shadow-md bg-white dark:bg-gray-900 dark:text-white duration-200 relative z-40">
+            <div className="container flex justify-between items-center py-4">
+                {/* Logo */}
+                <Link to="/" className="font-bold text-2xl flex gap-2">
+                    <img src={Logo} alt="Logo" className="w-10 h-10 rounded-full" />
+                    <span className="font-fancy text-xl">ADDIS RIDE</span>
+                </Link>
 
-  const handleLoginClick = () => {
-    navigate(ROUTES.login);
-  };
+                {/* Desktop Navigation */}
+                <div className="hidden sm:flex items-center space-x-4">
+                    {!isLoggedIn ? (
+                        <>
+                            <button
+                                onClick={() => navigate("/login")}
+                                className="text-black dark:text-white"
+                            >
+                                Sign In
+                            </button>
+                            <div className="relative">
+                                {/* Register Button */}
+                                <button
+                                    onClick={() => setShowDropdown(!showDropdown)}
+                                    className="bg-blue-500 text-white py-2 px-4 rounded-lg flex items-center"
+                                >
+                                    Register <FaCaretDown className="ml-2" />
+                                </button>
 
-  const isMainPath = location.pathname === ROUTES.home;
-
-  return (
-    <div className="shadow-md bg-white dark:bg-gray-900 dark:text-white duration-200 relative z-40">
-      <div className="bg-primary/40 py-2">
-        <div className="container flex justify-between items-center">
-          {/* Logo */}
-          <Link to={ROUTES.home} className="font-bold text-2xl sm:text-3xl flex gap-2">
-            <img src={Logo} alt="Logo" className="w-10 h-10 rounded-full" />
-            <span className="font-fancy text-xl">ADDIS RIDE</span>
-          </Link>
-
-          {/* Desktop Navigation */}
-          <div className="hidden sm:flex items-center space-x-4 pr-0 gap-8">
-            {!isLoggedIn && isMainPath && (
-              <>
-                <button
-                  className="font-fancy text-black dark:text-white"
-                  onClick={handleLoginClick}
-                >
-                  Sign in
-                </button>
-                <div className="relative">
-                  <button
-                    onClick={toggleDropdown}
-                    className="font-fancy text-black bg-gradient-to-r from-blue-500 to-blue-400 hover:from-blue-600 hover:to-blue-500 px-4 py-2 rounded-lg shadow-md dark:bg-gradient-to-r dark:from-gray-900 dark:to-gray-600 dark:hover:from-gray-800 dark:hover:to-gray-700 dark:text-white flex items-center gap-2"
-                  >
-                    Register <FaCaretDown />
-                  </button>
-                  {dropdownOpen && (
-                    <Dropdown
-                      links={[
-                        { id: 1, name: "Register Driver", link: ROUTES.registerDriver },
-                        { id: 2, name: "Register Passenger", link: ROUTES.registerUser },
-                      ]}
-                      toggle={() => setDropdownOpen(false)}
-                    />
-                  )}
+                                {/* Dropdown Menu */}
+                                {showDropdown && (
+                                    <div className="absolute right-0 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg">
+                                        <button
+                                            onClick={() => handleRegisterClick("driver")}
+                                            className="block w-full min-w-max text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                        >
+                                            Register Driver
+                                        </button>
+                                        <button
+                                            onClick={() => handleRegisterClick("passenger")}
+                                            className="block min-w-max w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                        >
+                                            Register Passenger
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        </>
+                    ) : (
+                        <>
+                            {userRole === "passenger" && (
+                                <button
+                                    onClick={handleOrderPopup}
+                                    className="bg-gradient-to-r from-blue-500 to-blue-600 text-white py-2 px-4 rounded-lg flex items-center"
+                                >
+                                    Book Now <FaBusAlt className="ml-2" />
+                                </button>
+                            )}
+                            <button
+                                onClick={handleLogout}
+                                className="bg-red-500 text-white py-2 px-4 rounded-lg"
+                            >
+                                Logout
+                            </button>
+                        </>
+                    )}
+                    <DarkMode />
                 </div>
-              </>
-            )}
 
-            {isLoggedIn && userRole === "driver" && (
-              <button
-                onClick={LogoutClicked}
-                className="bg-gradient-to-r from-primary to-secondary transition-all duration-200 text-white py-1 px-4 rounded-full"
-              >
-                Logout
-              </button>
-            )}
-
-            {isLoggedIn && userRole === "passenger" && (
-              <>
-                <button
-                  onClick={handleOrderPopup}
-                  className="bg-gradient-to-r from-primary to-secondary transition-all duration-200 text-white py-1 px-4 rounded-full flex items-center gap-3"
-                >
-                  Book Now <FaBusAlt className="text-xl text-white" />
-                </button>
-                <button
-                  onClick={() => navigate(ROUTES.logout)}
-                  className="bg-gradient-to-r from-primary to-secondary transition-all duration-200 text-white py-1 px-4 rounded-full"
-                >
-                  Logout
-                </button>
-              </>
-            )}
-
-            <DarkMode />
-          </div>
-
-          <button className="sm:hidden" onClick={toggleSideMenu}>
-            {sideMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
-          </button>
+                {/* Mobile Navigation */}
+                <div className="sm:hidden">
+                    <FaBars size={24} />
+                </div>
+            </div>
         </div>
-      </div>
-
-      {sideMenuOpen && <MobileMenu toggle={toggleSideMenu} />}
-    </div>
-  );
+    );
 };
 
 export default Navbar;

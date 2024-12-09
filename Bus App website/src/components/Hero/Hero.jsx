@@ -75,6 +75,19 @@ const Hero = () => {
                   >
                     {data.description}
                   </p>
+                  {location.pathname=='/'&&
+                  (<div
+                      data-aos="fade-up"
+                      data-aos-duration="500"
+                      data-aos-once="300"
+                    >
+                      <button
+                       onClick={() => navigate("/login")}
+                        className="bg-gradient-to-r from-primary to-secondary hover:scale-105 duration-200 text-white py-2 px-4 rounded-full"
+                      >
+                       Get Started
+                      </button>
+                    </div>)}
                   {location.pathname !== '/' && (
                     <div
                       data-aos="fade-up"
