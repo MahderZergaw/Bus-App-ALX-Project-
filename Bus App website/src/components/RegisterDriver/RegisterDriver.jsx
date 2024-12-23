@@ -51,8 +51,9 @@ const RegisterDriver = () => {
 
     return (
         <div
-            className="min-h-screen flex items-center justify-center bg-cover bg-center"
-            style={{ backgroundImage: "url('/src/assets/Subs-Image.jpg')" }}
+            className="min-h-screen flex items-center justify-center bg-cover bg-center bg-[url('/src/assets/test1.jpg')]
+            dark:bg-[url('/src/assets/darkmodeBg.jpg')]"
+            
         >
             <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
                 <h1 className="text-2xl font-bold mb-4 text-gray-800">Create Account for Driver</h1>

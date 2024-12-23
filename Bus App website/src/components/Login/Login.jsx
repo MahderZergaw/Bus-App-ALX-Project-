@@ -42,14 +42,14 @@ const Login = () => {
 
     return (
         <div
-            className="min-h-screen flex items-center justify-center bg-cover bg-center"
-            style={{ backgroundImage: "url('/src/assets/Subs-Image.jpg')" }}
+            className="min-h-screen flex items-center justify-center bg-cover bg-center bg-[url('/src/assets/test1.jpg')]
+            dark:bg-[url('/src/assets/darkmodeBg.jpg')]"
         >
-            <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+            <div className="bg-black p-8 rounded-lg shadow-md w-full max-w-md opacity-50">
                 <h1 className="text-2xl font-bold mb-4">Login</h1>
                 <form onSubmit={handleLogin}>
                     <div className="mb-4">
-                        <label htmlFor="username" className="block text-gray-700">
+                        <label htmlFor="username" className="block text-white">
                             Username
                         </label>
                         <input
@@ -62,7 +62,7 @@ const Login = () => {
                         />
                     </div>
                     <div className="mb-4">
-                        <label htmlFor="password" className="block text-gray-700">
+                        <label htmlFor="password" className="block text-white">
                             Password
                         </label>
                         <input

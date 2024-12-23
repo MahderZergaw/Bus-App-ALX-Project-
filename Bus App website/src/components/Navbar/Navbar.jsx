@@ -48,11 +48,11 @@ const Navbar = ({ handleOrderPopup }) => {
                             >
                                 Sign In
                             </button>
-                            <div className="relative">
+                            <div className="relative ">
                                 {/* Register Button */}
-                                <button
+                                <button 
                                     onClick={() => setShowDropdown(!showDropdown)}
-                                    className="bg-blue-500 text-white py-2 px-4 rounded-lg flex items-center"
+                                    className="bg-gradient-to-l from-blue-400 to-blue-600 dark:bg-gradient-to-r dark:from-slate-900 dark:to-slate-700 text-black dark:text-white py-2 px-4 rounded-lg flex items-center"
                                 >
                                     Register <FaCaretDown className="ml-2" />
                                 </button>

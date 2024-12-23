@@ -51,10 +51,10 @@ const RegisterUser = () => {
 
     return (
         <div
-            className="min-h-screen flex items-center justify-center bg-cover bg-center"
-            style={{ backgroundImage: "url('/src/assets/Subs-Image.jpg')" }}
-        >
-            <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+            className="min-h-screen flex items-center justify-center bg-cover bg-center bg-[url('/src/assets/test3.jpg')]
+            dark:bg-[url('/src/assets/test2.jpg')] "
+    >
+            <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md opacity-45 dark:opacity-45">
                 <h1 className="text-2xl font-bold mb-4 text-gray-800">Create Account for Passenger</h1>
                 <form onSubmit={handleRegister}>
                     <div className="mb-4">
@@ -124,7 +124,13 @@ const RegisterUser = () => {
                     </div>
                     <button
                         type="submit"
-                        className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition duration-200"
+                        className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition duration-200 opacity-100"
+                    >
+                        Sign Up
+                    </button>
+                    <button
+                        type="submit"
+                        className="btn w-full bg-blue-900 text-white py-2 rounded hover:bg-blue-600 transition duration-200 opacity-100"
                     >
                         Sign Up
                     </button>

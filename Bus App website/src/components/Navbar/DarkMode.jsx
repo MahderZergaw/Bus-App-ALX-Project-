@@ -21,13 +21,13 @@ const DarkMode = () => {
     <div className="flex items-center cursor-pointer">
       {theme === "light" ? (
         <FaMoon
-          className="text-xl  dark:text-black hover:text-gray-900 transition duration-300"
+          className="text-xl  dark:text-black hover:text-gray-900 transition duration-300 ml-10 "
           onClick={toggleTheme}
           aria-label="Switch to dark mode"
         />
       ) : (
         <IoSunnyOutline
-          className="text-xl text-white hover:text-grey-600 transition duration-300"
+          className="text-xl text-white hover:text-grey-600 transition duration-300 ml-10"
           onClick={toggleTheme}
           aria-label="Switch to light mode"
         />
