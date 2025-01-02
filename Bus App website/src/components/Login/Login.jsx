@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Textfield from '../Common/Textfield'
 // import jwtDecode from 'jwt-decode';
 import { jwtDecode } from "jwt-decode";
 import { login } from '../../redux/authSlice'; // Import Redux action
+import { Label, Span  } from '../Common/Typography';
+import Button from '../Common/Button';
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -45,65 +48,69 @@ const Login = () => {
             className="min-h-screen flex items-center justify-center bg-cover bg-center bg-[url('/src/assets/test1.jpg')]
             dark:bg-[url('/src/assets/darkmodeBg.jpg')]"
         >
-            <div className="bg-black p-8 rounded-lg shadow-md w-full max-w-md opacity-50">
-                <h1 className="text-2xl font-bold mb-4">Login</h1>
+            <div className="bg-white dark:bg-black p-8 rounded-lg shadow-md w-full max-w-md opacity-75">
+                <h1 className="text-2xl font-bold mb-4 font-fancy ">Login</h1>
                 <form onSubmit={handleLogin}>
                     <div className="mb-4">
-                        <label htmlFor="username" className="block text-white">
+                        <Label htmlFor="username" className="block">
                             Username
-                        </label>
-                        <input
+                        </Label>
+                        <Textfield
                             type="text"
                             id="username"
-                            className="w-full px-3 py-2 border rounded"
+                            className="w-full px-3 py-2"
                             placeholder="Enter Username"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
                         />
                     </div>
                     <div className="mb-4">
-                        <label htmlFor="password" className="block text-white">
+                        <Label htmlFor="password" className="block ">
                             Password
-                        </label>
-                        <input
+                        </Label>
+                        <Textfield
                             type="password"
                             id="password"
-                            className="w-full px-3 py-2 border rounded"
+                            className="w-full px-3 py-2 "
                             placeholder="Enter Password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
                     </div>
+                  
                     <div className="mb-4 flex items-center justify-between">
                         <div>
-                            <input type="checkbox" id="remember" className="mr-2" />
-                            <label htmlFor="remember" className="text-gray-700">
+                            <input  type="checkbox" id="remember" className="mr-2" />
+                            <Label htmlFor="remember" >
                                 Remember Me
-                            </label>
+                            </Label>
                         </div>
-                        <span className="text-blue-500 hover:underline cursor-pointer">
+                        <Span className="text-blue-500 hover:underline cursor-pointer">
                             Forgot Password?
-                        </span>
+                        </Span>
                     </div>
-                    <button
+                    <div className="flex justify-center">
+                    <Button
                         type="submit"
-                        className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition duration-200"
+                        className="w-40 rounded transition duration-200 "
                     >
                         Login
-                    </button>
+                    </Button>
+                    </div>
+                    
                     <div className="mt-4 text-center">
-                        <span>
+                        <Span className="inline-flex space-x-4">
                             New Here?{" "}
                             <Link to="/RegisterDriver" className="text-blue-500 hover:underline">
-                                Create Driver Account
+                            &nbsp; &nbsp; Driver Signup  
                             </Link>
-                        </span>
-                    </div>
-                    <div className="mt-4 text-center">
-                        <Link to="/RegisterUser" className="text-blue-500 hover:underline">
-                            Create Passenger Account
+                            <Link to="/RegisterUser" className="text-blue-500 hover:underline">
+                             Passenger Signup 
                         </Link>
+                        </Span>
+                        
                     </div>
+                   
                 </form>
             </div>
         </div>

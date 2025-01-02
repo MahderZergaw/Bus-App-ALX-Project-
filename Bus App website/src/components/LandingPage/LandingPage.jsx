@@ -4,7 +4,7 @@ import Trips from "../Trips/Trips";
 import Terminals from "../Bus Terminals/Terminals";
 import Banner from "../Banner/Banner";
 import Subscribe from "../Subscribe/Subscribe";
-import Testimonials from "../Testimonials/Testimonials";
+// import Testimonials from "../Testimonials/Testimonials";
 import Footer from "../Footer/Footer";
 
 
@@ -18,7 +18,7 @@ const LandingPage = ({ handleOrderPopup }) => {
       <Trips />
       
       <Banner />
-      <Testimonials />
+      {/* <Testimonials /> */}
       <Footer />
     </div>
   );

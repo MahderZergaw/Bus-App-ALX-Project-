@@ -4,7 +4,7 @@ import Image2 from "../../assets/Hero_Images/Image2.jpg";
 import Image3 from "../../assets/Hero_Images/Image3.jpg";
 import Slider from "react-slick";
 import { useNavigate, useLocation } from "react-router-dom";
-
+import Button from "../Common/Button";
 const ImageList = [
   {
     id: 1,
@@ -81,12 +81,12 @@ const Hero = () => {
                       data-aos-duration="500"
                       data-aos-once="300"
                     >
-                      <button
+                      <Button
                        onClick={() => navigate("/login")}
-                        className="bg-gradient-to-r from-blue-500 to-blue-700 dark:from-slate-700 dark:to-slate-800 hover:scale-105 duration-200 text-white py-2 px-4 rounded-lg"
+                        className=" hover:scale-105 duration-200 text-black py-2 px-4 rounded-lg"
                       >
                        Get Started
-                      </button>
+                      </Button>
                     </div>)}
                   {location.pathname !== '/' && (
                     <div
@@ -94,12 +94,12 @@ const Hero = () => {
                       data-aos-duration="500"
                       data-aos-once="300"
                     >
-                      <button
+                      <Button
                         onClick={handleBookNowClick}
-                        className="bg-gradient-to-r from-primary to-secondary hover:scale-105 duration-200 text-white py-2 px-4 rounded-full"
+                        className=" hover:scale-105 duration-200 py-2 px-4 rounded-full"
                       >
                         Book A Seat Now
-                      </button>
+                      </Button>
                     </div>
                   )}
                 </div>

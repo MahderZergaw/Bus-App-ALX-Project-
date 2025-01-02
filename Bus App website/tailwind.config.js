@@ -6,7 +6,15 @@ export default {
     extend: {
       colors: {
         primary: "#007BFF",
-        secondary: "#0056b3",
+        secondary: "#6C757D",
+        backgroundLight: '#F8F9FA', // Light Gray
+        backgroundDark: '#212529', // Dark Gray
+        accent: '#28A745',
+             },
+      fontSize: {
+        h1: '32px',
+        h2: '24px',
+        body: '16px',
       },
       container: {
         center: true,
@@ -15,11 +23,13 @@ export default {
           sm: "3rem",
         },
       },
+      
       fontFamily: {
         curvy: ["Pacifico", "cursive"],
         mono: ["Courier New", "monospace"],
         fancy: ["Dancing Script", "cursive"],
         modern: ["Montserrat", "sans-serif"],
+        sans: ['Roboto', 'Poppins', 'sans-serif'],
       },
     },
   },

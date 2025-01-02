@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Link } from "react-router-dom";
+import TextField from '../Common/Textfield';
+import { Label } from '../Common/Typography';
+import { Span } from '../Common/Typography';
+import Button from '../Common/Button';
 
 const RegisterDriver = () => {
     const [username, setUsername] = useState('');
@@ -55,87 +59,87 @@ const RegisterDriver = () => {
             dark:bg-[url('/src/assets/darkmodeBg.jpg')]"
             
         >
-            <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-                <h1 className="text-2xl font-bold mb-4 text-gray-800">Create Account for Driver</h1>
+            <div className="my-3 bg-white dark:bg-[#111827] p-8 rounded-lg shadow-md w-full max-w-md opacity-75">
+                <h1 className="text-2xl font-bold mb-4 font-fancy ">Register Driver</h1>
                 <form onSubmit={handleRegister}>
                     <div className="mb-4">
-                        <label htmlFor="fullname" className="block text-gray-700">
+                        <Label htmlFor="fullname" className="block ">
                             Full Name
-                        </label>
-                        <input
+                        </Label>
+                        <TextField
                             type="text"
                             id="fullname"
-                            className="w-full px-3 py-2 border rounded text-gray-900"
+                            className="w-full px-3 py-1 "
                             placeholder="Enter Full Name"
                             value={fullname}
                             onChange={e => setFullname(e.target.value)}
                         />
                     </div>
                     <div className="mb-4">
-                        <label htmlFor="username" className="block text-gray-700">
+                        <Label htmlFor="username" className="block ">
                             Username
-                        </label>
-                        <input
+                        </Label>
+                        <TextField
                             type="text"
                             id="username"
-                            className="w-full px-3 py-2 border rounded text-gray-900"
+                            className="w-full px-3 py-1 "
                             placeholder="Enter Username"
                             value={username}
                             onChange={e => setUsername(e.target.value)}
                         />
                     </div>
                     <div className="mb-4">
-                        <label htmlFor="plateNumber" className="block text-gray-700">
+                        <Label htmlFor="plateNumber" className="block ">
                             Plate Number
-                        </label>
-                        <input
+                        </Label>
+                        <TextField
                             type="text"
                             id="plateNumber"
-                            className="w-full px-3 py-2 border rounded text-gray-900"
+                            className="w-full px-3 py-1"
                             placeholder="Enter Plate Number"
                             value={plateNumber}
                             onChange={e => setPlateNumber(e.target.value)}
                         />
                     </div>
                     <div className="mb-4">
-                        <label htmlFor="email" className="block text-gray-700">
+                        <Label htmlFor="email" className="block ">
                             Email
-                        </label>
-                        <input
+                        </Label>
+                        <TextField
                             type="email"
                             id="email"
-                            className="w-full px-3 py-2 border rounded text-gray-900"
+                            className="w-full px-3 py-1 "
                             placeholder="Enter Email"
                             value={email}
                             onChange={e => setEmail(e.target.value)}
                         />
                     </div>
                     <div className="mb-4">
-                        <label htmlFor="password" className="block text-gray-700">
+                        <Label htmlFor="password" className="block ">
                             Password
-                        </label>
-                        <input
+                        </Label>
+                        <TextField
                             type="password"
                             id="password"
-                            className="w-full px-3 py-2 border rounded text-gray-900"
+                            className="w-full px-3 py-1 "
                             placeholder="Enter Password"
                             value={password}
                             onChange={e => setPassword(e.target.value)}
                         />
                     </div>
-                    <button
+                    <Button
                         type="submit"
-                        className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition duration-200"
+                        className="w-full bg-blue-500 text-white py-1 rounded hover:bg-blue-600 transition duration-200"
                     >
                         Sign Up
-                    </button>
-                    <div className="mt-4 text-center text-gray-700">
-                        <span>
+                    </Button>
+                    <div className="mt-4 text-center ">
+                        <Span>
                             Already have an account?{" "}
                             <Link to="/login" className="text-blue-500 hover:underline">
                                 Login
                             </Link>
-                        </span>
+                        </Span>
                     </div>
                 </form>
             </div>

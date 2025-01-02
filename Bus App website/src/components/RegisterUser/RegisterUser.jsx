@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Link } from "react-router-dom";
+import TextField from '../Common/Textfield';
+import { Span } from '../Common/Typography';
+import { Label } from '../Common/Typography';
+import Button from '../Common/Button';
 
 const RegisterUser = () => {
     const [username, setUsername] = useState('');
@@ -10,37 +14,35 @@ const RegisterUser = () => {
     const [fullname, setFullname] = useState('');
 
     const handleRegister = async (event) => {
-        event.preventDefault();  // Prevent the default form submission
+        event.preventDefault();
         try {
-            // Register the user
-            console.log("clicked");
             const registerResponse = await axios.post('http://localhost:8000/api/Account/register/', {
                 username,
                 email,
                 password,
-                is_driver: false
+                is_driver: false,
             });
 
-            console.log(registerResponse);
-
-            // Log in to obtain the token
             const loginResponse = await axios.post('http://localhost:8000/api/Account/token/', {
                 username,
-                password
+                password,
             });
 
             const { access } = loginResponse.data;
 
-            // Make the authenticated request to create the driver profile
-            await axios.post('http://localhost:8000/api/Account/user/profile/', {
-                user: registerResponse.data.id,
-                phone_number: phoneNumber,
-                fullname: fullname,
-            }, {
-                headers: {
-                    Authorization: `Bearer ${access}`
+            await axios.post(
+                'http://localhost:8000/api/Account/user/profile/',
+                {
+                    user: registerResponse.data.id,
+                    phone_number: phoneNumber,
+                    fullname,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${access}`,
+                    },
                 }
-            });
+            );
 
             alert("Passenger registered successfully");
         } catch (error) {
@@ -51,96 +53,75 @@ const RegisterUser = () => {
 
     return (
         <div
-            className="min-h-screen flex items-center justify-center bg-cover bg-center bg-[url('/src/assets/test3.jpg')]
-            dark:bg-[url('/src/assets/test2.jpg')] "
-    >
-            <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md opacity-45 dark:opacity-45">
-                <h1 className="text-2xl font-bold mb-4 text-gray-800">Create Account for Passenger</h1>
+            className="h-full flex items-center justify-center bg-cover bg-center bg-[url('/src/assets/test3.jpg')]
+            dark:bg-[url('/src/assets/test2.jpg')]"
+        >
+            <div className="my-3 bg-white dark:bg-[#111827] p-8 rounded-lg shadow-md w-full max-w-md opacity-75 max-h-[90vh] overflow-y-auto">
+                <h1 className="text-2xl font-bold mb-4 dark:text-white text-black font-fancy">Register Passenger</h1>
                 <form onSubmit={handleRegister}>
-                    <div className="mb-4">
-                        <label htmlFor="fullname" className="block text-gray-700">
-                            Full Name
-                        </label>
-                        <input
+                    <div className="mt-2">
+                        <Label htmlFor="fullname">Full Name</Label>
+                        <TextField
                             type="text"
                             id="fullname"
-                            className="w-full px-3 py-2 border rounded text-gray-900"
                             placeholder="Enter Full Name"
                             value={fullname}
-                            onChange={e => setFullname(e.target.value)}
+                            onChange={(e) => setFullname(e.target.value)}
                         />
                     </div>
-                    <div className="mb-4">
-                        <label htmlFor="username" className="block text-gray-700">
-                            Username
-                        </label>
-                        <input
+                    <div className="mt-2">
+                        <Label htmlFor="username">Username</Label>
+                        <TextField
                             type="text"
                             id="username"
-                            className="w-full px-3 py-2 border rounded text-gray-900"
                             placeholder="Enter Username"
                             value={username}
-                            onChange={e => setUsername(e.target.value)}
+                            onChange={(e) => setUsername(e.target.value)}
                         />
                     </div>
-                    <div className="mb-4">
-                        <label htmlFor="phoneNumber" className="block text-gray-700">
-                            Phone Number
-                        </label>
-                        <input
+                    <div className="mt-2">
+                        <Label htmlFor="phoneNumber">Phone Number</Label>
+                        <TextField
                             type="text"
                             id="phoneNumber"
-                            className="w-full px-3 py-2 border rounded text-gray-900"
                             placeholder="Enter Phone Number"
                             value={phoneNumber}
-                            onChange={e => setPhoneNumber(e.target.value)}
+                            onChange={(e) => setPhoneNumber(e.target.value)}
                         />
                     </div>
-                    <div className="mb-4">
-                        <label htmlFor="email" className="block text-gray-700">
-                            Email
-                        </label>
-                        <input
+                    <div className="mt-2">
+                        <Label htmlFor="email">Email</Label>
+                        <TextField
                             type="email"
                             id="email"
-                            className="w-full px-3 py-2 border rounded text-gray-900"
                             placeholder="Enter Email"
                             value={email}
-                            onChange={e => setEmail(e.target.value)}
+                            onChange={(e) => setEmail(e.target.value)}
                         />
                     </div>
-                    <div className="mb-4">
-                        <label htmlFor="password" className="block text-gray-700">
-                            Password
-                        </label>
-                        <input
+                    <div className='mt-2'>
+                        <Label htmlFor="password">Password</Label>
+                        <TextField
                             type="password"
                             id="password"
-                            className="w-full px-3 py-2 border rounded text-gray-900"
                             placeholder="Enter Password"
                             value={password}
-                            onChange={e => setPassword(e.target.value)}
+                            onChange={(e) => setPassword(e.target.value)}
                         />
                     </div>
-                    <button
+                    <Button
                         type="submit"
-                        className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition duration-200 opacity-100"
+                        className=" mt-4 w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition duration-200"
                     >
                         Sign Up
-                    </button>
-                    <button
-                        type="submit"
-                        className="btn w-full bg-blue-900 text-white py-2 rounded hover:bg-blue-600 transition duration-200 opacity-100"
-                    >
-                        Sign Up
-                    </button>
-                    <div className="mt-4 text-center text-gray-700">
-                        <span>
+                    </Button>
+                    <div className="mt-4 text-center">
+                        <Span>
                             Already have an account?{" "}
                             <Link to="/login" className="text-blue-500 hover:underline">
                                 Login
                             </Link>
-                        </span>
+                        </Span>
                     </div>
                 </form>
             </div>

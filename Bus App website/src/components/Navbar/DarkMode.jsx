@@ -1,35 +1,41 @@
-import React, { useEffect, useState } from "react";
-import { FaSun, FaMoon } from "react-icons/fa";
+import React, { useEffect } from "react";
+import { FaMoon, FaSun } from "react-icons/fa";
 import { IoSunnyOutline } from "react-icons/io5";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleTheme } from '../../redux/uiSlice';
 
 const DarkMode = () => {
-  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+  const dispatch = useDispatch();
+  const isDarkMode = useSelector((state) => state.ui.theme);
 
   useEffect(() => {
     const root = document.documentElement;
-    if (theme === "dark") {
+    if (isDarkMode) {
       root.classList.add("dark");
+      localStorage.setItem("theme", "dark"); // Keep localStorage in sync
     } else {
       root.classList.remove("dark");
+      localStorage.setItem("theme", "light");
     }
-    localStorage.setItem("theme", theme);
-  }, [theme]);
+  }, [isDarkMode]);
 
-  const toggleTheme = () => setTheme(theme === "light" ? "dark" : "light");
+  const handleToggle = () => {
+    dispatch(toggleTheme());
+  };
 
   return (
     <div className="flex items-center cursor-pointer">
-      {theme === "light" ? (
-        <FaMoon
-          className="text-xl  dark:text-black hover:text-gray-900 transition duration-300 ml-10 "
-          onClick={toggleTheme}
-          aria-label="Switch to dark mode"
+      {isDarkMode ? (
+        <IoSunnyOutline
+          className="text-xl text-white hover:text-gray-700 transition duration-300 ml-10"
+          onClick={handleToggle}
+          aria-label="Switch to light mode"
         />
       ) : (
-        <IoSunnyOutline
-          className="text-xl text-white hover:text-grey-600 transition duration-300 ml-10"
-          onClick={toggleTheme}
-          aria-label="Switch to light mode"
+        <FaMoon
+          className="text-xl dark:text-black hover:text-gray-200 transition duration-300 ml-10"
+          onClick={handleToggle}
+          aria-label="Switch to dark mode"
         />
       )}
     </div>
